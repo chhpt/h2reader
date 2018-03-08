@@ -42,6 +42,11 @@ class SearchScreen extends Component {
     this.search.blur();
   }
 
+  handleListPress(title) {
+    categoryStore.loadCategoryApps(title);
+    this.props.navigation.navigate('CategoryApp');
+  }
+
   render() {
     const { category } = categoryStore;
     return (
@@ -55,7 +60,12 @@ class SearchScreen extends Component {
             onFocus={() => this.handleFocus()}
             inputStyle={{ backgroundColor: '#fff', fontSize: 16 }}
           />
-          <List icon={true} data={category} title="所有分类" />
+          <List
+            icon={true}
+            data={category}
+            title="所有分类"
+            listOnPress={title => this.handleListPress(title)}
+          />
         </View>
       </Provider>
     );

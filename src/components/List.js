@@ -23,7 +23,7 @@ class SearchResult extends Component {
           <Icon
             name="chevron-right"
             size={30}
-            onPress={() => this.props.loadCategory(item.title)}
+            onPress={() => this.props.listOnPress(item.title)}
           />
         ) : (
           <Text />

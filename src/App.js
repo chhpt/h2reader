@@ -27,7 +27,7 @@ const SearchStack = StackNavigator(
       screen: SearchDetailScreen
     },
     CategoryApp: {
-      scrren: CategoryAppScreen
+      screen: CategoryAppScreen
     }
   },
   {

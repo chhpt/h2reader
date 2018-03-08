@@ -2,10 +2,9 @@
  * @Author: wuyiqing 
  * @Date: 2018-03-08 23:44:24 
  * @Last Modified by: wuyiqing
- * @Last Modified time: 2018-03-08 23:50:26
+ * @Last Modified time: 2018-03-08 23:58:03
  * 分类的应用列表
  */
-
 
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
@@ -26,15 +25,19 @@ class CategoryAppScreen extends Component {
     headerStyle: {
       height: 0
     },
-    tabBarVisible: false,
+    tabBarVisible: false
   };
 
   render() {
-    const {categoryApps} = categoryStore;
+    const { categoryApps, categoryTitle } = categoryStore;
     return (
       <Provider categoryStore={categoryStore}>
         <View>
-          <List data={categoryApps.slice(0)} icons={false}/>
+          <List
+            data={categoryApps.slice(0)}
+            icons={false}
+            title={categoryTitle}
+          />
         </View>
       </Provider>
     );

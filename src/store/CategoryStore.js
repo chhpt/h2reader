@@ -2,17 +2,18 @@
  * @Author: wuyiqing 
  * @Date: 2018-03-08 14:00:53 
  * @Last Modified by: wuyiqing
- * @Last Modified time: 2018-03-08 23:48:28
+ * @Last Modified time: 2018-03-08 23:59:57
  * 
  */
 
-import { observable, computed } from 'mobx';
+import { observable, computed, action } from 'mobx';
 import API from '../api';
 
 class CategoryStore {
   @observable categories = [];
   @observable searchResult = [];
   @observable categoryApps = [];
+  @observable categoryTitle = '';
 
   // 所有应用
   @computed
@@ -34,14 +35,18 @@ class CategoryStore {
   findApp(name) {
     if (this.categories.slice(0).length) {
       const apps = this.apps.slice(0).filter(e => e.title.indexOf(name) > -1);
-      this.searchResult = apps.length ? apps : [{ title: '没有找到' }];
+      this.searchResult = apps.length ? apps : [{ title: '无结果' }];
+    } else {
+      this.searchResult = [{ title: '无结果' }];
     }
-    this.searchResult = [{ title: '无结果' }];
   }
 
   @action
   loadCategoryApps(title) {
-    this.categoryApps = this.categories.slice(0).find(e => e.title === title).sections;
+    this.categoryTitle = title;
+    this.categoryApps = this.categories
+      .slice(0)
+      .find(e => e.title === title).sections;
   }
 
   @action
