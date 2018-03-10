@@ -2,30 +2,52 @@
  * @Author: wuyiqing 
  * @Date: 2018-03-08 14:01:30 
  * @Last Modified by: wuyiqing
- * @Last Modified time: 2018-03-09 21:03:18
+ * @Last Modified time: 2018-03-10 20:46:23
  * 存储用户信息
  */
 
+import API from '../api';
+import { observable, action } from 'mobx';
+import { passwordEncrypt } from '../utils';
+import { saveData } from '../utils/storage';
 
 class UserStore {
-  constructor() {
-    this.username = '';
-    this.email = '';
-    this.followApps = [];
-    this.collection = [];
+  @observable account = {};
+  @observable followApps = [];
+  @observable collectArticles = [];
+
+  async sendCode(email) {
+    const res = await API.sendVerificationCode(email);
+    return res;
   }
 
-  register(username, email, password, code) {
-
+  @action
+  async register(account) {
+    const { username, email, password, code } = account;
+    const res = await API.register(email, username, password, code);
+    // 注册成功
+    if (res.status) {
+      const { account } = res;
+      this.accoutn = account;
+      saveData(account, account); 
+    }
+    return res;
   }
 
-  login(email, password) {
-
+  @action
+  async login(account) {
+    const { email, password } = account;
+    const res = await API.login(email, passwordEncrypt(password).toString());
+    // 登录成功
+    if (res.status) {
+      const { account } = res;
+      this.accoutn = account;
+      saveData(account, account);
+    }
+    return res;
   }
 
-  logout() {
-    
-  }
+  async logout() {}
 }
 
 export default new UserStore();

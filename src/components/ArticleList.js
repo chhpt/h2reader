@@ -2,7 +2,7 @@
  * @Author: wuyiqing 
  * @Date: 2018-03-09 17:34:38 
  * @Last Modified by: wuyiqing
- * @Last Modified time: 2018-03-09 20:25:23
+ * @Last Modified time: 2018-03-10 13:42:15
  * 文章列表
  */
 
@@ -12,8 +12,6 @@ import { List, Text, ListItem, Card } from 'react-native-elements';
 
 import Colors from '../styles/Colors';
 import { formatTime } from '../utils';
-
-console.log(formatTime)
 
 class SearchResult extends Component {
   constructor(props) {

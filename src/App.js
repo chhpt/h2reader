@@ -3,6 +3,8 @@ import { View, Modal } from 'react-native';
 import { TabNavigator, TabBarBottom, StackNavigator } from 'react-navigation';
 import Colors from './styles/Colors';
 import Metrics from './styles/Metrics';
+import Storage from 'react-native-storage';
+import { AsyncStorage } from 'react-native';
 
 // 主页
 import HomeScreen from './views/Home';
@@ -14,10 +16,19 @@ import SearchDetailScreen from './views/SearchDetailScreen';
 import CategoryAppScreen from './views/CategoryAppScreen';
 import ArticleListScreen from './views/ArticleListScreen';
 import LoginScreen from './views/LoginScreen';
-
-
+import AccountScrren from './views/AccountScrren';
 
 console.disableYellowBox = true;
+
+// 本地存储
+global.storage =
+  global.storage ||
+  new Storage({
+    size: 2000,
+    storageBackend: AsyncStorage,
+    defaultExpires: null,
+    enableCache: true
+  });
 
 const SearchStack = StackNavigator(
   {
@@ -43,10 +54,13 @@ const UserStack = StackNavigator(
   {
     Login: {
       screen: LoginScreen
+    },
+    Account: {
+      screen: AccountScrren
     }
   },
   {
-    initialRouteName: 'Login'
+    initialRouteName: 'Account'
   }
 );
 
@@ -102,7 +116,7 @@ class App extends Component {
 
     return (
       <View style={{ flex: 1 }}>
-        <RootStack/>
+        <RootStack />
         {/* <Modal visible={modelVisible} onRequestClose={() => {}}>
           <LaunchScreen />
         </Modal> */}
