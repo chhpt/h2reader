@@ -10,10 +10,17 @@ import { observer, inject } from 'mobx-react';
 
 @inject('categoryStore')
 class HeaderSearchBar extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: false
+    }
+  }
+  
   componentDidMount() {
     // 清空搜索结果
     this.props.categoryStore.clearSearchResult();
-    this.search.focus();
+    // this.search.focus();
   }
 
   handleSubmit(text) {
@@ -29,9 +36,11 @@ class HeaderSearchBar extends Component {
       <View>
         <SearchBar
           lightTheme
-          showLoading
           round
-          ref={search => (this.search = search)}
+          ref={search => {
+            this.search = search;
+          }}
+          showLoading={this.state.loading}
           inputStyle={{ backgroundColor: '#fff', fontSize: 16 }}
           onSubmitEditing={e => this.handleSubmit(e.nativeEvent.text)}
           placeholder="Search"

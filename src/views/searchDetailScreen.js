@@ -5,8 +5,9 @@ import { observable } from 'mobx';
 import { observer, Provider } from 'mobx-react';
 
 import Colors from '../styles/Colors';
-import SearchBar from '../components/SearchBar';
+import HeaderSearchBar from '../components/HeaderSearchBar';
 import categoryStore from '../store/CategoryStore';
+import appStore from '../store/AppStore';
 import List from '../components/List';
 
 @observer
@@ -25,13 +26,23 @@ class SearchScreen extends Component {
 
   componentDidMount() {}
 
+  handleLoadArticleList(app) {
+    appStore.setCurrentApp(app);
+    appStore.fetchArticleList();
+    this.props.navigation.navigate('ArticleList', { title: app.title });
+  }
+
   render() {
-    const {searchResult} = categoryStore;
+    const { searchResult } = categoryStore;
     return (
       <Provider categoryStore={categoryStore}>
         <View>
-          <SearchBar />
-          <List data={searchResult.slice(0)} icons={false}/>
+          <HeaderSearchBar />
+          <List
+            data={searchResult.slice(0)}
+            followIcon={true}
+            titleOnPress={app => this.handleLoadArticleList(app)}
+          />
         </View>
       </Provider>
     );

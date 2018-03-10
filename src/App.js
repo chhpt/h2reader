@@ -5,15 +5,16 @@ import Colors from './styles/Colors';
 import Metrics from './styles/Metrics';
 
 // 主页
-import HomeScreen from './views/home';
-import SearchScreen from './views/searchScreen';
-import PersonalScreen from './views/personalScreen';
+import HomeScreen from './views/Home';
+import SearchScreen from './views/SearchScreen';
+import PersonalScreen from './views/PersonalScreen';
 // 首屏
-import LaunchScreen from './views/launchScreen';
-import SearchDetailScreen from './views/searchDetailScreen';
-import CategoryAppScreen from './views/categoryAppScreen';
+import LaunchScreen from './views/LaunchScreen';
+import SearchDetailScreen from './views/SearchDetailScreen';
+import CategoryAppScreen from './views/CategoryAppScreen';
+import ArticleListScreen from './views/ArticleListScreen';
+import LoginScreen from './views/LoginScreen';
 
-import categoryStore from './store/CategoryStore';
 
 
 console.disableYellowBox = true;
@@ -28,10 +29,24 @@ const SearchStack = StackNavigator(
     },
     CategoryApp: {
       screen: CategoryAppScreen
+    },
+    ArticleList: {
+      screen: ArticleListScreen
     }
   },
   {
     initialRouteName: 'Search'
+  }
+);
+
+const UserStack = StackNavigator(
+  {
+    Login: {
+      screen: LoginScreen
+    }
+  },
+  {
+    initialRouteName: 'Login'
   }
 );
 
@@ -44,7 +59,7 @@ const RootStack = TabNavigator(
       screen: SearchStack
     },
     Personal: {
-      screen: PersonalScreen
+      screen: UserStack
     }
   },
   {
@@ -87,7 +102,7 @@ class App extends Component {
 
     return (
       <View style={{ flex: 1 }}>
-        <RootStack screenProps={{ categoryStore }} />
+        <RootStack/>
         {/* <Modal visible={modelVisible} onRequestClose={() => {}}>
           <LaunchScreen />
         </Modal> */}

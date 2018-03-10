@@ -39,12 +39,12 @@ class SearchScreen extends Component {
 
   handleFocus() {
     this.props.navigation.navigate('SearchDetail');
-    this.search.blur();
+    // this.search.blur();
   }
 
   handleListPress(title) {
     categoryStore.loadCategoryApps(title);
-    this.props.navigation.navigate('CategoryApp');
+    this.props.navigation.navigate('CategoryApp', { title });
   }
 
   render() {
@@ -56,12 +56,12 @@ class SearchScreen extends Component {
             round
             lightTheme
             placeholder="Search"
-            ref={search => (this.search = search)}
+            ref={search => this.search = search}
             onFocus={() => this.handleFocus()}
             inputStyle={{ backgroundColor: '#fff', fontSize: 16 }}
           />
           <List
-            icon={true}
+            detailIcon={true}
             data={category}
             title="所有分类"
             listOnPress={title => this.handleListPress(title)}
