@@ -2,7 +2,7 @@
  * @Author: wuyiqing 
  * @Date: 2018-03-09 17:34:38 
  * @Last Modified by: wuyiqing
- * @Last Modified time: 2018-03-10 13:42:15
+ * @Last Modified time: 2018-03-11 18:23:10
  * 文章列表
  */
 
@@ -28,7 +28,7 @@ class SearchResult extends Component {
           title={item.title}
           image={{ uri: item.image }}
           titleStyle={Styles.titleStyle}
-          imageStyle={{ alignSelf: 'flex-start' }}
+          containerStyle={Styles.cardStyle}
         >
           <Text style={Styles.TextStyle}>{item.summary.slice(0, 64)}</Text>
           <Text>{formatTime(item.time)}</Text>
@@ -41,20 +41,30 @@ class SearchResult extends Component {
     const { data } = this.props;
     return (
       <ScrollView contentContainerStyle={Styles.ScrollView}>
-        <List style={Styles.List}>
+        <View>
           <FlatList
             data={data}
             renderItem={({ item }) => this.renderItem(item)}
           />
-        </List>
+        </View>
       </ScrollView>
     );
   }
 }
 
 const Styles = StyleSheet.create({
+  ScrollView: {
+    backgroundColor: '#fff',
+    paddingBottom: 60
+  },
   ListItem: {
     margin: 5
+  },
+  cardStyle: {
+    borderWidth: 0,
+    elevation: 4,
+    padding: 10,
+    borderRadius: 2
   },
   titleStyle: {
     textAlign: 'left',
@@ -65,9 +75,6 @@ const Styles = StyleSheet.create({
     marginBottom: 10,
     fontSize: 16,
     lineHeight: 30
-  },
-  ScrollView: {
-    paddingBottom: 60
   },
   CategoryTitle: {
     marginTop: 20,

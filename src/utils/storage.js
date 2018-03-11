@@ -9,13 +9,13 @@ export const saveData = async (key, data) => {
 export const getData = async key => {
   return new Promise((resolve, reject) => {
     global.storage
-    .load({ key })
-    .then(value => {
-      resolve(value);
-    })
-    .catch(err => {
-      throw new Error(err);
-    });
+      .load({ key })
+      .then(value => {
+        resolve(value);
+      })
+      .catch(err => {
+        reject(err);
+      });
   });
 };
 

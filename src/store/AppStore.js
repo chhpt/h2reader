@@ -2,7 +2,7 @@
  * @Author: wuyiqing 
  * @Date: 2018-03-08 14:00:53 
  * @Last Modified by: wuyiqing
- * @Last Modified time: 2018-03-09 18:00:22
+ * @Last Modified time: 2018-03-11 20:43:13
  * 存储应用层信息
  */
 
@@ -11,12 +11,25 @@ import API from '../api';
 
 class AppStore {
   @observable articleList = [];
-  @observable followedApps = [];
   @observable currentApp = {};
+  @observable dialogVisible = false;
+  @observable dialogText = '';
 
   @action
   setCurrentApp(app) {
     this.currentApp = app;
+  }
+
+  @action
+  showDialog(text) {
+    this.dialogText = text;    
+    this.dialogVisible = true;
+  }
+
+  @action
+  hideDialog(){
+    this.dialogText = '';    
+    this.dialogVisible = false;
   }
 
   @action

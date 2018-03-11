@@ -2,7 +2,7 @@
  * @Author: wuyiqing 
  * @Date: 2018-03-09 17:00:48 
  * @Last Modified by: wuyiqing
- * @Last Modified time: 2018-03-09 18:17:14
+ * @Last Modified time: 2018-03-11 18:23:28
  * 应用文章列表展示
  */
 
@@ -25,7 +25,7 @@ class ArticleListScreen extends Component {
   render() {
     const { articleList } = appStore;
     return (
-      <View>
+      <View style={{flex: 1, backgroundColor: '#fff'}}>
         <ArticleList data={articleList.slice(0)} />
       </View>
     );

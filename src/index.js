@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import { View, Modal } from 'react-native';
-import { TabNavigator, TabBarBottom, StackNavigator } from 'react-navigation';
+import {
+  TabNavigator,
+  TabBarBottom,
+  StackNavigator,
+  SwitchNavigator
+} from 'react-navigation';
 import Colors from './styles/Colors';
 import Metrics from './styles/Metrics';
 import Storage from 'react-native-storage';
@@ -17,7 +22,11 @@ import CategoryAppScreen from './views/CategoryAppScreen';
 import ArticleListScreen from './views/ArticleListScreen';
 import LoginScreen from './views/LoginScreen';
 import AccountScrren from './views/AccountScrren';
+import Dialog from './components/Dialog';
 
+import userStore from './store/UserStore';
+import categoryStore from './store/CategoryStore';
+import { getData } from './utils/storage';
 console.disableYellowBox = true;
 
 // 本地存储
@@ -29,6 +38,19 @@ global.storage =
     defaultExpires: null,
     enableCache: true
   });
+
+// 避免应用重启时，个人中心的切换效果不好
+getData('account').then(res => {
+  userStore.setAccount(res);
+});
+
+getData('categories').then(res => {
+  categoryStore.setCategories(res);
+});
+
+getData('followApps').then(res=>{
+  userStore.setFollowApps(res);
+})
 
 const SearchStack = StackNavigator(
   {
@@ -50,17 +72,29 @@ const SearchStack = StackNavigator(
   }
 );
 
-const UserStack = StackNavigator(
+const AuthStack = StackNavigator(
   {
     Login: {
       screen: LoginScreen
     },
-    Account: {
-      screen: AccountScrren
+    Personal: {
+      screen: PersonalScreen
     }
   },
   {
-    initialRouteName: 'Account'
+    initialRouteName: 'Personal'
+  }
+);
+
+const UserStack = SwitchNavigator(
+  {
+    Account: {
+      screen: AccountScrren
+    },
+    Auth: AuthStack
+  },
+  {
+    initialRouteName: 'Auth'
   }
 );
 
@@ -72,7 +106,7 @@ const RootStack = TabNavigator(
     Search: {
       screen: SearchStack
     },
-    Personal: {
+    User: {
       screen: UserStack
     }
   },
@@ -80,7 +114,7 @@ const RootStack = TabNavigator(
     tabBarComponent: TabBarBottom,
     tabBarPosition: 'bottom',
     animationEnabled: true,
-    swipeEnabled: true,
+    swipeEnabled: false,
     tabBarOptions: {
       activeTintColor: Colors.active,
       inactiveTintColor: Colors.text,
@@ -116,10 +150,13 @@ class App extends Component {
 
     return (
       <View style={{ flex: 1 }}>
-        <RootStack />
+        <View style={{ flex: 1 }}>
+          <RootStack />
+        </View>
         {/* <Modal visible={modelVisible} onRequestClose={() => {}}>
           <LaunchScreen />
         </Modal> */}
+        <Dialog />
       </View>
     );
   }

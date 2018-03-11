@@ -2,12 +2,14 @@
  * @Author: wuyiqing 
  * @Date: 2018-03-08 14:00:53 
  * @Last Modified by: wuyiqing
- * @Last Modified time: 2018-03-08 23:59:57
+ * @Last Modified time: 2018-03-11 22:05:52
  * 
  */
 
 import { observable, computed, action } from 'mobx';
 import API from '../api';
+import { saveData } from '../utils/storage';
+import userStore from './UserStore';
 
 class CategoryStore {
   @observable categories = [];
@@ -30,6 +32,29 @@ class CategoryStore {
     return this.categories.slice(0);
   }
 
+  @computed
+  get appList() {
+    return this.categoryApps.map(e => {
+      const app = userStore.followApps.slice(0).find(v => v.title === e.title);
+      e.followed = Boolean(app) && !app.delete;
+      return e;
+    });
+  }
+
+  @computed
+  get searchAppList() {
+    return this.searchResult.map(e => {
+      const app = userStore.followApps.slice(0).find(v => v.title === e.title);
+      e.followed = Boolean(app) && !app.delete;
+      return e;
+    });
+  }
+
+  @action
+  setCategories(categories) {
+    this.categories = categories;
+  }
+
   // 获取应用名称
   @action
   findApp(name) {
@@ -42,11 +67,18 @@ class CategoryStore {
   }
 
   @action
-  loadCategoryApps(title) {
+  loadCategoryApps(title, filter) {
     this.categoryTitle = title;
-    this.categoryApps = this.categories
-      .slice(0)
-      .find(e => e.title === title).sections;
+    const apps = this.categories.slice(0).find(e => e.title === title).sections;
+    if (filter) {
+      apps.forEach(e => {
+        const app = userStore.followApps
+          .slice(0)
+          .find(v => v.title === e.title);
+        e.followed = Boolean(app) && !app.delete;
+      });
+    }
+    this.categoryApps = apps;
   }
 
   @action
@@ -59,6 +91,7 @@ class CategoryStore {
     try {
       const res = await API.getCategories();
       this.categories = res;
+      saveData('categories', res);
       return res;
     } catch (error) {
       throw new Error(error);

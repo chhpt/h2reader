@@ -1,53 +1,14 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, TextInput, Keyboard } from 'react-native';
 import { Icon, Button, Overlay } from 'react-native-elements';
-
 import { observable } from 'mobx';
 import { observer, Provider } from 'mobx-react';
 
-import Dialog from '../components/Dialog';
+import Input from '../components/Input';
 import Colors from '../styles/Colors';
 import userStore from '../store/UserStore';
+import appStore from '../store/AppStore';
 import { validateEmail } from '../utils';
-
-// TextInput 包装
-const Input = ({
-  placeholder,
-  hasButton,
-  iconName,
-  onChangeText,
-  buttonLoading,
-  buttonOnPress,
-  buttonText,
-  secureTextEntry
-}) => (
-  <View style={Styles.InputWrapper}>
-    <Icon
-      name={iconName}
-      iconStyle={{ marginRight: 10 }}
-      size={20}
-      type="font-awesome"
-    />
-    <TextInput
-      underlineColorAndroid="transparent"
-      secureTextEntry={secureTextEntry}
-      placeholder={placeholder}
-      style={{ flex: 1, padding: 0 }}
-      onChangeText={text => onChangeText(text)}
-    />
-    {hasButton && (
-      <Button
-        text={buttonText}
-        loading={buttonLoading}
-        loadingProps={{ size: 'large', color: 'rgba(111, 202, 186, 1)' }}
-        textStyle={{ fontWeight: '400', fontSize: 15, color: Colors.link }}
-        buttonStyle={Styles.InputButton}
-        containerStyle={{ marginRight: 10 }}
-        onPress={buttonOnPress}
-      />
-    )}
-  </View>
-);
 
 @observer
 class LoginScreen extends Component {
@@ -61,8 +22,6 @@ class LoginScreen extends Component {
     code: ''
   };
 
-  @observable dialogVisible = false;
-  @observable dialogText = '';
   @observable codeLoading = false;
   @observable sendCodeText = '发送验证码';
   @observable actionLoading = false;
@@ -83,8 +42,7 @@ class LoginScreen extends Component {
 
   showDialog(text) {
     Keyboard.dismiss();
-    this.dialogText = text;
-    this.dialogVisible = true;
+    appStore.showDialog(text);
   }
 
   validateAccount() {
@@ -107,6 +65,7 @@ class LoginScreen extends Component {
         return true;
       }
     });
+
     // 某项为空，返回
     if (flag) return false;
 
@@ -147,11 +106,11 @@ class LoginScreen extends Component {
 
   // 登录成功跳转
   handleActionSuccess(text) {
-    this.actionLoading = false;
-    this.showDialog(`${text} \n 跳转中...`);
+    // this.showDialog(`${text} \n跳转中...`);
     setTimeout(() => {
+      this.actionLoading = false;
       this.props.navigation.navigate('Account');
-    }, 1000);
+    }, 500);
   }
 
   async userRegister() {
@@ -178,6 +137,7 @@ class LoginScreen extends Component {
       if (res.status) {
         this.handleActionSuccess('登录成功');
       } else {
+        this.actionLoading = false;
         this.showDialog(res.error);
       }
     }
@@ -224,9 +184,11 @@ class LoginScreen extends Component {
           )}
         </View>
 
-        <Text style={Styles.toggleText} onPress={() => this.toggleActio()}>
-          {this.loginAction ? '注册账号' : '登录'}
-        </Text>
+        <View style={Styles.toggleTextWrapper}>
+          <Text onPress={() => this.toggleActio()} style={Styles.toggleText}>
+            {this.loginAction ? '注册账号' : '登录'}
+          </Text>
+        </View>
         <Button
           text={this.loginAction ? '登录' : '注册'}
           loading={this.actionLoading}
@@ -235,11 +197,6 @@ class LoginScreen extends Component {
           buttonStyle={Styles.actionButton}
           containerStyle={{ marginTop: 10 }}
           onPress={() => this.handleAction()}
-        />
-        <Dialog
-          isVisible={this.dialogVisible}
-          text={this.dialogText}
-          confirmAction={() => (this.dialogVisible = false)}
         />
       </View>
     );
@@ -253,11 +210,16 @@ const Styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  toggleText: {
+  toggleTextWrapper: {
     width: 280,
     height: 40,
+    marginTop: 20
+  },
+  toggleText: {
+    width: 80,
+    height: 40,
     fontSize: 16,
-    marginTop: 20,
+    alignSelf: 'flex-end',
     textAlign: 'right',
     color: Colors.link
   },
@@ -268,22 +230,6 @@ const Styles = StyleSheet.create({
     borderColor: 'transparent',
     borderWidth: 0,
     borderRadius: 25
-  },
-  InputLable: { width: 60, height: 20, fontSize: 16 },
-  InputWrapper: {
-    marginTop: 20,
-    paddingLeft: 20,
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: 280,
-    height: 48,
-    borderWidth: 1,
-    borderRadius: 24,
-    borderColor: Colors.border
-  },
-  InputButton: {
-    borderWidth: 0,
-    backgroundColor: '#fff'
   }
 });
 
