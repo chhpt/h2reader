@@ -21,7 +21,9 @@ import SearchDetailScreen from './views/SearchDetailScreen';
 import CategoryAppScreen from './views/CategoryAppScreen';
 import ArticleListScreen from './views/ArticleListScreen';
 import LoginScreen from './views/LoginScreen';
-import AccountScrren from './views/AccountScrren';
+import AccountScreen from './views/AccountScreen';
+import ArticleScreen from './views/ArticleScreen';
+
 import Dialog from './components/Dialog';
 
 import userStore from './store/UserStore';
@@ -48,9 +50,13 @@ getData('categories').then(res => {
   categoryStore.setCategories(res);
 });
 
-getData('followApps').then(res=>{
+getData('followApps').then(res => {
   userStore.setFollowApps(res);
-})
+});
+
+getData('collectArticles').then(res => {
+  userStore.setCollectArticles(res);
+});
 
 const SearchStack = StackNavigator(
   {
@@ -65,6 +71,9 @@ const SearchStack = StackNavigator(
     },
     ArticleList: {
       screen: ArticleListScreen
+    },
+    Article: {
+      screen: ArticleScreen
     }
   },
   {
@@ -89,7 +98,7 @@ const AuthStack = StackNavigator(
 const UserStack = SwitchNavigator(
   {
     Account: {
-      screen: AccountScrren
+      screen: AccountScreen
     },
     Auth: AuthStack
   },
@@ -98,15 +107,32 @@ const UserStack = SwitchNavigator(
   }
 );
 
-const RootStack = TabNavigator(
+const HomeStack = StackNavigator(
   {
     Home: {
       screen: HomeScreen
     },
-    Search: {
+    HomeArticleList: {
+      screen: ArticleListScreen
+    },
+    Article: {
+      screen: ArticleScreen
+    }
+  },
+  {
+    initialRouteName: 'Home'
+  }
+);
+
+const RootStack = TabNavigator(
+  {
+    HomeStack: {
+      screen: HomeStack
+    },
+    SearchStack: {
       screen: SearchStack
     },
-    User: {
+    UserStack: {
       screen: UserStack
     }
   },

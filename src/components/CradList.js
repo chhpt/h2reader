@@ -2,12 +2,12 @@
  * @Author: wuyiqing 
  * @Date: 2018-03-11 12:57:50 
  * @Last Modified by: wuyiqing
- * @Last Modified time: 2018-03-11 22:50:20
+ * @Last Modified time: 2018-03-12 18:52:04
  * 小卡片列表，展示用户收藏数据等
  */
 
 import React, { Component } from 'react';
-import { ScrollView, FlatList, View, StyleSheet, Text } from 'react-native';
+import { FlatList, View, StyleSheet, Text } from 'react-native';
 import { List, ListItem, Card, Avatar } from 'react-native-elements';
 import { observer } from 'mobx-react';
 
@@ -42,7 +42,7 @@ const AppView = ({ item, onPress }) => (
   </View>
 );
 
-const ArticleView = ({ item }) => (
+const ArticleView = ({ item, onPress }) => (
   <View style={Styles.ListItem}>
     <Card
       title={item.title}
@@ -54,7 +54,12 @@ const ArticleView = ({ item }) => (
       </Text>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         <Text style={Styles.TextStyle}>{formatTime(item.time)}</Text>
-        <Text style={[Styles.TextStyle, { color: Colors.link }]}>取消收藏</Text>
+        <Text
+          style={[Styles.TextStyle, { color: Colors.link }]}
+          onPress={onPress}
+        >
+          取消收藏
+        </Text>
       </View>
     </Card>
   </View>
@@ -67,14 +72,19 @@ class CardList extends Component {
   }
 
   async cancelFollowApp(app) {
-    const account = await getData('account');
-    if (!account.username) {
-      appStore.showDialog('你还没有登录，不能关注应用');
-      return;
-    }
     userStore.cancelUserFollowApp(app).then(res => {
       if (res.status) {
-        appStore.showDialog('取消关注成功');
+        appStore.showDialog('已取消关注');
+      } else {
+        appStore.showDialog(res.error);
+      }
+    });
+  }
+
+  cancelCollectArticle(article) {
+    userStore.cancelCollectArticle(article).then(res => {
+      if (res.status) {
+        appStore.showDialog('已取消收藏');
       } else {
         appStore.showDialog(res.error);
       }
@@ -85,7 +95,10 @@ class CardList extends Component {
     return type ? (
       <AppView item={item} onPress={() => this.cancelFollowApp(item)} />
     ) : (
-      <ArticleView item={item} />
+      <ArticleView
+        item={item}
+        onPress={() => this.cancelCollectArticle(item)}
+      />
     );
   }
 
@@ -94,14 +107,12 @@ class CardList extends Component {
     const { type } = this.props;
     const data = type ? followApps : collectArticles;
     return (
-      <ScrollView contentContainerStyle={Styles.ScrollView}>
-        <View>
-          <FlatList
-            data={data}
-            renderItem={({ item }) => this.renderItem(type, item)}
-          />
-        </View>
-      </ScrollView>
+      <View>
+        <FlatList
+          data={data}
+          renderItem={({ item }) => this.renderItem(type, item)}
+        />
+      </View>
     );
   }
 }
@@ -125,9 +136,6 @@ const Styles = StyleSheet.create({
   TextStyle: {
     marginLeft: 10,
     lineHeight: 30
-  },
-  ScrollView: {
-    paddingBottom: 60
   },
   CategoryTitle: {
     marginTop: 20,

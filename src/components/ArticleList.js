@@ -2,13 +2,13 @@
  * @Author: wuyiqing 
  * @Date: 2018-03-09 17:34:38 
  * @Last Modified by: wuyiqing
- * @Last Modified time: 2018-03-11 18:23:10
+ * @Last Modified time: 2018-03-12 18:46:11
  * 文章列表
  */
 
 import React, { Component } from 'react';
-import { ScrollView, FlatList, View, StyleSheet } from 'react-native';
-import { List, Text, ListItem, Card } from 'react-native-elements';
+import { FlatList, View, StyleSheet, Text } from 'react-native';
+import { Card } from 'react-native-elements';
 
 import Colors from '../styles/Colors';
 import { formatTime } from '../utils';
@@ -16,20 +16,21 @@ import { formatTime } from '../utils';
 class SearchResult extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      formatTime
-    };
   }
 
   renderItem(item) {
     return (
       <View style={Styles.ListItem}>
         <Card
-          title={item.title}
-          image={{ uri: item.image }}
-          titleStyle={Styles.titleStyle}
+          image={item.image ? { uri: item.image } : null}
           containerStyle={Styles.cardStyle}
         >
+          <Text
+            style={Styles.titleStyle}
+            onPress={() => this.props.cardOnPress(item)}
+          >
+            {item.title}
+          </Text>
           <Text style={Styles.TextStyle}>{item.summary.slice(0, 64)}</Text>
           <Text>{formatTime(item.time)}</Text>
         </Card>
@@ -40,23 +41,21 @@ class SearchResult extends Component {
   render() {
     const { data } = this.props;
     return (
-      <ScrollView contentContainerStyle={Styles.ScrollView}>
-        <View>
+      <View style={{ flex: 1, backgroundColor: '#fff' }}>
+        {data.length ? (
           <FlatList
             data={data}
+            onEndReached={() => this.props.onEndReached()}
+            onEndReachedThreshold={0}
             renderItem={({ item }) => this.renderItem(item)}
           />
-        </View>
-      </ScrollView>
+        ) : null}
+      </View>
     );
   }
 }
 
 const Styles = StyleSheet.create({
-  ScrollView: {
-    backgroundColor: '#fff',
-    paddingBottom: 60
-  },
   ListItem: {
     margin: 5
   },
@@ -67,9 +66,11 @@ const Styles = StyleSheet.create({
     borderRadius: 2
   },
   titleStyle: {
+    color: Colors.title,
     textAlign: 'left',
-    marginLeft: 10,
-    marginRight: 10
+    fontSize: 18,
+    fontWeight: 'bold',
+    lineHeight: 36
   },
   TextStyle: {
     marginBottom: 10,

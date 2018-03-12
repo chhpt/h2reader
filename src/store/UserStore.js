@@ -2,7 +2,7 @@
  * @Author: wuyiqing 
  * @Date: 2018-03-08 14:01:30 
  * @Last Modified by: wuyiqing
- * @Last Modified time: 2018-03-11 19:47:38
+ * @Last Modified time: 2018-03-12 15:38:37
  * 存储用户信息
  */
 
@@ -10,6 +10,8 @@ import API from '../api';
 import { observable, action, computed } from 'mobx';
 import { passwordEncrypt } from '../utils';
 import { saveData, removeData } from '../utils/storage';
+
+import appStore from './AppStore';
 
 const {
   sendVerificationCode,
@@ -19,13 +21,16 @@ const {
   getCollectArticles,
   getFollowAPPs,
   followAPP,
-  cancelFollowAPP
+  cancelFollowAPP,
+  collectArticle,
+  cancelCollectArticle
 } = API;
+
 
 class UserStore {
   @observable account = {};
-  @observable followApps = [{ title: '没有数据' }];
-  @observable collectArticles = [{ title: '没有数据' }];
+  @observable followApps = [];
+  @observable collectArticles = [];
   @observable cardListData = [];
 
   async sendCode(email) {
@@ -42,6 +47,12 @@ class UserStore {
   setFollowApps(apps) {
     this.followApps = apps;
     saveData('followApps', apps);
+  }
+
+  @action
+  setCollectArticles(articles) {
+    this.collectArticles = articles;
+    saveData('collectArticles', articles);
   }
 
   @action
@@ -83,7 +94,7 @@ class UserStore {
   async fetchCollectArticles() {
     const res = await getCollectArticles();
     if (res.status) {
-      this.collectArticles = res.articles;
+      this.setCollectArticles(res.articles);
     }
     return res;
   }
@@ -92,7 +103,7 @@ class UserStore {
   async fetchFollowApps() {
     const res = await getFollowAPPs();
     if (res.status) {
-      this.followApps = res.apps;
+      this.setFollowApps(res.apps);
     }
     return res;
   }
@@ -113,6 +124,39 @@ class UserStore {
     if (res.status) {
       const { apps } = res;
       this.setFollowApps(apps);
+    }
+    return res;
+  }
+
+  @action
+  async collectArticle(article) {
+    // 获取当前应用
+    const app = appStore.currentApp;
+    // 防止文章内容被删除
+    const copyArticle = Object.assign({}, article);
+    copyArticle.content = null;
+    copyArticle.summary = copyArticle.summary.length < 128
+      ? copyArticle.summary
+      : copyArticle.summary.slice(0, 128);
+    copyArticle.appName = app.title;
+    const res = await collectArticle(copyArticle);
+    if (res.status) {
+      const articles = this.collectArticles.concat(copyArticle);
+      this.setCollectArticles(articles);
+    }
+    return res;
+  }
+
+  @action
+  async cancelCollectArticle(article) {
+    const res = await cancelCollectArticle(article.url);
+    if (res.status) {
+      // 拷贝数组
+      const source = this.collectArticles.slice(0);
+      const index = source.findIndex((e) => e.title === article.title);
+      source.splice(index, 1);
+      // 更新收藏文章
+      this.setCollectArticles(source);
     }
     return res;
   }

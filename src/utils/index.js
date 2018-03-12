@@ -2,22 +2,26 @@ import HmacMD5 from 'crypto-js/hmac-md5';
 import MD5 from 'crypto-js/md5';
 
 export const formatTime = time => {
+  let passTime = time;
+  if (!passTime) return 0;
   // 时间为 2017-02-13 样式
-  if (!time) return 0;
-  if (time.toString().indexOf('-') > -1) {
-    time = Date.parse(time);
-  } else if (Number(time) !== Number(time)) {
+  if (passTime.toString().indexOf('-') > -1) {
+    const copyTime = Date.parse(passTime);
+    // 转换失败
+    if (copyTime !== copyTime) return passTime;
+  } else if (Number(passTime) !== Number(passTime)) {
     // 时间无法转化成数字
-    return time;
+    return passTime;
   }
+
   // 将时间单位转化为 s
   const parseTime =
-    parseInt(time, 10) < Date.now() / 1000
-      ? parseInt(time, 10)
-      : Math.floor(parseInt(time, 10) / 1000);
+    parseInt(passTime, 10) < Date.now() / 1000
+      ? parseInt(passTime, 10)
+      : Math.floor(parseInt(passTime, 10) / 1000);
 
   if (parseTime !== parseTime) {
-    return time;
+    return passTime;
   }
 
   const now = Date.now();

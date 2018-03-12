@@ -95,9 +95,11 @@ class AccountScreen extends Component {
   renderScene(index, route) {
     // 为了能在切换 tab 数据能及时响应，使用了 observe 的 card 组件
     if (index === 0) {
+      userStore.fetchCollectArticles();
       return <CardList type={0} />;
     }
     if (index === 1) {
+      userStore.fetchFollowApps();
       return <CardList type={1} />;
     }
     if (index === 2) {
@@ -131,6 +133,7 @@ class AccountScreen extends Component {
             <Text style={Styles.cardTextStyle}>{this.account.username}</Text>
           </Card>
         </View>
+
         <View style={{ flex: 1 }}>
           <TabLayout
             routes={this.state.routes}
