@@ -2,12 +2,12 @@
  * @Author: wuyiqing 
  * @Date: 2018-03-11 12:57:50 
  * @Last Modified by: wuyiqing
- * @Last Modified time: 2018-03-12 18:52:04
+ * @Last Modified time: 2018-03-12 19:31:38
  * 小卡片列表，展示用户收藏数据等
  */
 
 import React, { Component } from 'react';
-import { FlatList, View, StyleSheet, Text } from 'react-native';
+import { FlatList, View, StyleSheet, Text, Linking } from 'react-native';
 import { List, ListItem, Card, Avatar } from 'react-native-elements';
 import { observer } from 'mobx-react';
 
@@ -42,13 +42,12 @@ const AppView = ({ item, onPress }) => (
   </View>
 );
 
-const ArticleView = ({ item, onPress }) => (
+const ArticleView = ({ item, onPress, titleOnPress }) => (
   <View style={Styles.ListItem}>
-    <Card
-      title={item.title}
-      titleStyle={Styles.titleStyle}
-      containerStyle={Styles.cardStyle}
-    >
+    <Card containerStyle={Styles.cardStyle}>
+      <Text style={Styles.titleStyle} onPress={() => titleOnPress(item.url)}>
+        {item.title}
+      </Text>
       <Text style={Styles.TextStyle}>
         {item.summary && item.summary.slice(0, 64)}
       </Text>
@@ -69,6 +68,10 @@ const ArticleView = ({ item, onPress }) => (
 class CardList extends Component {
   constructor(props) {
     super(props);
+  }
+
+  openLink(url) {
+    Linking.openURL(url);
   }
 
   async cancelFollowApp(app) {
@@ -97,6 +100,7 @@ class CardList extends Component {
     ) : (
       <ArticleView
         item={item}
+        titleOnPress={url => this.openLink(url)}
         onPress={() => this.cancelCollectArticle(item)}
       />
     );
@@ -129,9 +133,8 @@ const Styles = StyleSheet.create({
   },
   titleStyle: {
     textAlign: 'left',
-    fontSize: 18,
-    marginLeft: 10,
-    marginRight: 10
+    fontSize: 20,
+    margin: 10
   },
   TextStyle: {
     marginLeft: 10,

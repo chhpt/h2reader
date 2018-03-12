@@ -1,4 +1,4 @@
-package com.h2reader;
+package com.H2Reader;
 
 import com.facebook.react.ReactActivity;
 
@@ -10,6 +10,6 @@ public class MainActivity extends ReactActivity {
      */
     @Override
     protected String getMainComponentName() {
-        return "h2reader";
+        return "H2Reader";
     }
 }

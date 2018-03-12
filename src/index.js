@@ -168,7 +168,7 @@ class App extends Component {
       this.setState({
         modelVisible: false
       });
-    }, 500);
+    }, 2000);
   }
 
   render() {
@@ -179,9 +179,9 @@ class App extends Component {
         <View style={{ flex: 1 }}>
           <RootStack />
         </View>
-        {/* <Modal visible={modelVisible} onRequestClose={() => {}}>
+        <Modal visible={modelVisible} onRequestClose={() => {}}>
           <LaunchScreen />
-        </Modal> */}
+        </Modal>
         <Dialog />
       </View>
     );

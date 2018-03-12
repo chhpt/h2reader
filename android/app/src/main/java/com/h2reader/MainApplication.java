@@ -1,4 +1,4 @@
-package com.h2reader;
+package com.H2Reader;
 
 import android.app.Application;
 
