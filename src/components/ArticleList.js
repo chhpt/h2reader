@@ -2,7 +2,7 @@
  * @Author: wuyiqing 
  * @Date: 2018-03-09 17:34:38 
  * @Last Modified by: wuyiqing
- * @Last Modified time: 2018-03-12 18:46:11
+ * @Last Modified time: 2018-03-12 21:02:39
  * 文章列表
  */
 
@@ -46,7 +46,7 @@ class SearchResult extends Component {
           <FlatList
             data={data}
             onEndReached={() => this.props.onEndReached()}
-            onEndReachedThreshold={0}
+            onEndReachedThreshold={1}
             renderItem={({ item }) => this.renderItem(item)}
           />
         ) : null}
