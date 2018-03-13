@@ -2,7 +2,7 @@
  * @Author: wuyiqing 
  * @Date: 2018-03-11 12:56:56 
  * @Last Modified by: wuyiqing
- * @Last Modified time: 2018-03-11 19:57:23
+ * @Last Modified time: 2018-03-13 14:20:21
  * 分类和搜索结果列表
  */
 
@@ -32,7 +32,14 @@ class SearchResult extends Component {
     return (
       <View style={Styles.ListItem}>
         {/* 应用图片 */}
-        <Avatar medium rounded source={{ uri: item.imageURL }} />
+        <Avatar
+          medium
+          rounded
+          source={{ uri: item.imageURL }}
+          onPress={
+            this.props.titleOnPress ? () => this.props.titleOnPress(item) : null
+          }
+        />
         {/* 标题 */}
         <Text
           style={Styles.ItemText}

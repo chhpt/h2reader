@@ -2,7 +2,7 @@
  * @Author: wuyiqing 
  * @Date: 2018-03-08 23:44:24 
  * @Last Modified by: wuyiqing
- * @Last Modified time: 2018-03-11 22:04:32
+ * @Last Modified time: 2018-03-13 14:37:28
  * 分类的应用列表
  */
 
@@ -44,17 +44,13 @@ class CategoryAppScreen extends Component {
     }
     if (!app.followed) {
       userStore.userFollowApp(app).then(res => {
-        if (res.status) {
-          appStore.showDialog('关注应用成功');
-        } else {
+        if (!res.status) {
           appStore.showDialog(res.error);
         }
       });
     } else {
       userStore.cancelUserFollowApp(app).then(res => {
-        if (res.status) {
-          appStore.showDialog('取消关注成功');
-        } else {
+        if (!res.status) {
           appStore.showDialog(res.error);
         }
       });

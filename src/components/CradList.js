@@ -2,7 +2,7 @@
  * @Author: wuyiqing 
  * @Date: 2018-03-11 12:57:50 
  * @Last Modified by: wuyiqing
- * @Last Modified time: 2018-03-12 19:31:38
+ * @Last Modified time: 2018-03-13 15:16:49
  * 小卡片列表，展示用户收藏数据等
  */
 
@@ -20,7 +20,7 @@ import { getData } from '../utils/storage';
 const AppView = ({ item, onPress }) => (
   <View style={Styles.ListItem}>
     <Card containerStyle={Styles.cardStyle}>
-      <View style={{ flex: 1, flexDirection: 'row' }}>
+      <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
         <Avatar
           medium
           rounded
@@ -48,7 +48,7 @@ const ArticleView = ({ item, onPress, titleOnPress }) => (
       <Text style={Styles.titleStyle} onPress={() => titleOnPress(item.url)}>
         {item.title}
       </Text>
-      <Text style={Styles.TextStyle}>
+      <Text style={Styles.TextStyle} onPress={() => titleOnPress(item.url)}>
         {item.summary && item.summary.slice(0, 64)}
       </Text>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>

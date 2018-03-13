@@ -12,9 +12,6 @@ import { observer, inject } from 'mobx-react';
 class HeaderSearchBar extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      loading: false
-    }
   }
   
   componentDidMount() {
@@ -40,7 +37,7 @@ class HeaderSearchBar extends Component {
           ref={search => {
             this.search = search;
           }}
-          showLoading={this.state.loading}
+          autoFocus={true}
           inputStyle={{ backgroundColor: '#fff', fontSize: 16 }}
           onSubmitEditing={e => this.handleSubmit(e.nativeEvent.text)}
           placeholder="Search"

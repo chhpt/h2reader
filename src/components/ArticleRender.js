@@ -5,7 +5,8 @@ import {
   View,
   StyleSheet,
   Image,
-  Dimensions
+  Dimensions,
+  Linking
 } from 'react-native';
 import { List, Text, ListItem, Card } from 'react-native-elements';
 import HTML from 'react-native-render-html';
@@ -49,6 +50,10 @@ class ArticleRender extends Component {
     super(props);
   }
 
+  openURL(t, url) {
+    Linking.openURL(url);
+  }
+
   render() {
     const { article } = this.props;
     return (
@@ -69,16 +74,17 @@ class ArticleRender extends Component {
             ignoreNodesFunction={(node, parentTagName, parentIsText) => {
               if (!node.data) return false;
               if (node.data.indexOf('\n') > -1) {
-                return true;
+                return node.data.replace(/\r?\n|\r/g, '');
               }
             }}
+            onLinkPress={(t, url) => this.openURL(t, url)}
             listsPrefixesRenderers={{
               ul: (htmlAttribs, children, convertedCSSStyles, passProps) => {
                 return (
                   <Text
                     style={{ marginTop: 10, marginRight: 10, fontSize: 16 }}
                   >
-                  ~
+                    ~
                   </Text>
                 );
               }

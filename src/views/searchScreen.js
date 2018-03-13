@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, ProgressBarAndroid, Modal } from 'react-native';
+import { View, StyleSheet, ProgressBarAndroid } from 'react-native';
 import { Icon, Button, Text, SearchBar } from 'react-native-elements';
 import { observable } from 'mobx';
 import { observer, Provider } from 'mobx-react';
@@ -11,7 +11,6 @@ import userStore from '../store/UserStore';
 
 @observer
 class SearchScreen extends Component {
-  @observable modalVisible = false;
 
   constructor(props) {
     super(props);
@@ -73,23 +72,6 @@ class SearchScreen extends Component {
             titleOnPress={item => this.handleListPress(item.title)}
             listOnPress={title => this.handleListPress(title)}
           />
-          {/* 加载动画 */}
-          <Modal
-            visible={this.modalVisible}
-            transparent={true}
-            animationType="fade"
-            onRequestClose={() => {}}
-          >
-            <View
-              style={{
-                flex: 1,
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}
-            >
-              <ProgressBarAndroid color={Colors.active} />
-            </View>
-          </Modal>
         </View>
       </Provider>
     );

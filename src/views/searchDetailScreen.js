@@ -12,7 +12,6 @@ import userStore from '../store/UserStore';
 import List from '../components/List';
 import { getData } from '../utils/storage';
 
-
 @observer
 class SearchScreen extends Component {
   constructor(props) {
@@ -42,17 +41,13 @@ class SearchScreen extends Component {
     }
     if (!app.followed) {
       userStore.userFollowApp(app).then(res => {
-        if (res.status) {
-          appStore.showDialog('关注应用成功');
-        } else {
+        if (!res.status) {
           appStore.showDialog(res.error);
         }
       });
     } else {
       userStore.cancelUserFollowApp(app).then(res => {
-        if (res.status) {
-          appStore.showDialog('取消关注成功');
-        } else {
+        if (!res.status) {
           appStore.showDialog(res.error);
         }
       });

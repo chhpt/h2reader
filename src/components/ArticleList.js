@@ -2,12 +2,12 @@
  * @Author: wuyiqing 
  * @Date: 2018-03-09 17:34:38 
  * @Last Modified by: wuyiqing
- * @Last Modified time: 2018-03-12 21:02:39
+ * @Last Modified time: 2018-03-13 14:43:06
  * 文章列表
  */
 
 import React, { Component } from 'react';
-import { FlatList, View, StyleSheet, Text } from 'react-native';
+import { FlatList, View, StyleSheet, Text, Image } from 'react-native';
 import { Card } from 'react-native-elements';
 
 import Colors from '../styles/Colors';
@@ -21,17 +21,24 @@ class SearchResult extends Component {
   renderItem(item) {
     return (
       <View style={Styles.ListItem}>
-        <Card
-          image={item.image ? { uri: item.image } : null}
-          containerStyle={Styles.cardStyle}
-        >
+        <Card containerStyle={Styles.cardStyle}>
+          <Image
+            style={{ width: '100%', height: 200 }}
+            source={item.image ? { uri: item.image } : null}
+            onPress={() => this.props.cardOnPress(item)}
+          />
           <Text
             style={Styles.titleStyle}
             onPress={() => this.props.cardOnPress(item)}
           >
             {item.title}
           </Text>
-          <Text style={Styles.TextStyle}>{item.summary.slice(0, 64)}</Text>
+          <Text
+            style={Styles.TextStyle}
+            onPress={() => this.props.cardOnPress(item)}
+          >
+            {item.summary.slice(0, 64)}
+          </Text>
           <Text>{formatTime(item.time)}</Text>
         </Card>
       </View>
@@ -67,6 +74,7 @@ const Styles = StyleSheet.create({
   },
   titleStyle: {
     color: Colors.title,
+    marginTop: 10,
     textAlign: 'left',
     fontSize: 18,
     fontWeight: 'bold',

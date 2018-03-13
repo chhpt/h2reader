@@ -2,7 +2,7 @@
  * @Author: wuyiqing 
  * @Date: 2018-03-11 22:55:40 
  * @Last Modified by: wuyiqing
- * @Last Modified time: 2018-03-12 10:12:21
+ * @Last Modified time: 2018-03-13 15:10:03
  * 首页 APP 展示列表
  */
 
@@ -90,26 +90,25 @@ class AppList extends Component {
     const { followApps } = userStore;
     const data = this.sliceApps(followApps.slice(0));
     return (
-      <ScrollView contentContainerStyle={Styles.ScrollView}>
+      <View style={{ flex: 1}}>
         <FlatList
+          showsVerticalScrollIndicator={false}
           data={data}
           renderItem={({ item }) => this.renderItem(item)}
         />
-      </ScrollView>
+      </View>
     );
   }
 }
 
 const Styles = StyleSheet.create({
-  ScrollView: {
-    flex: 1
-  },
   listWrapper: {
     flex: 1,
     flexDirection: 'row',
     marginLeft: 24,
     marginRight: 24,
-    marginTop: 30
+    marginTop: 20,
+    marginBottom: 20
   },
   appWrapper: {
     alignItems: 'center',
